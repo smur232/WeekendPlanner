@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+
     <style type="text/css">
       html, body { height: 100%; margin: 0; padding: 0; }
       #map { height: 100%; }
@@ -9,23 +10,15 @@
   <body>
     <div id="map"></div>
     <script type="text/javascript">
+        var latitude = {{ event.latitude }};
+        var longitude = {{ event.longitude }};
+        function initMap() {
+            var myLatLng = {lat: latitude, lng: longitude};
 
-{#var map;#}
-{#function initMap() {#}
-{#  map = new google.maps.Map(document.getElementById('map'), {#}
-{#    center: {lat: 35.6582091, lng:139.6994063},#}
-{#    zoom: 16#}
-{#  });#}
-
-
-
-function initMap() {
-    var myLatLng = {lat: 35.6581823, lng: 139.702043};
-    
-    var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 15,
-        center: myLatLng
-    });
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 15,
+                center: myLatLng
+            });
     
 {#    var contentString = '<div id="content">'+#}
 {#        '<div id="siteNotice">'+#}
@@ -47,7 +40,10 @@ function initMap() {
 {#        '(last visited June 22, 2009).</p>'+#}
 {#        '</div>'+#}
 {#        '</div>';#}
-    var contentString = "<img src='https://media.timeout.com/images/102540372/750/422/image.jpg'>";
+    var contentString = '<h3 id="restaurant_title" class="restaurant_title">{{ event.title }}</h3>'+
+            "<p> hello </p> " +
+            "<img src='{{ event.image_url }}' height='250' width='250'>" +
+            "<a href='{{ event.url }}'> TimeOut Tokyo Article </a> ";
     
     var infowindow = new google.maps.InfoWindow({
         content: contentString
@@ -57,14 +53,14 @@ function initMap() {
         map: map,
         title: 'Hello World!'
     });
-    var currently_open = {}
+    var currently_open = {};
     marker.addListener('click', function() {
         if (!(marker in currently_open) || currently_open[marker] != 1) {
             currently_open[marker] = 1;
             infowindow.open(map, marker);
         }
         else {
-            currently_open[marker] = 0
+            currently_open[marker] = 0;
             infowindow.close()
         }
     });
@@ -72,7 +68,7 @@ function initMap() {
 
     </script>
     <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDpr2GSxyAShZF1xo11yGtt8zJ2JBgshk&callback=initMap">
+      src="https://maps.googleapis.com/maps/api/js?key={{ MAPS_KEY }}&callback=initMap">
     </script>
   </body>
 </html>
